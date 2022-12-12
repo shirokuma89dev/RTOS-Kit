@@ -4,6 +4,11 @@
 
 誰でも簡単にFreeRTOSで並列処理ができます！！！
 
+## 重要 Important
+
+**現在開発中です！あと数日待ってください。
+It's in development now! Please wait a few more days.**
+
 ## 概念
 
 ![アートボード 1](https://user-images.githubusercontent.com/47915291/206947016-9dfed748-1db9-4174-8a67-9c1f480fcbd1.png)
