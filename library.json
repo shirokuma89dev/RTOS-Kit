@@ -2,31 +2,21 @@
     "name": "RTOS-Kit",
     "version": "1.0.0",
     "description": "FreeRTOSを誰でも簡単に扱えるようにするためのライブラリです。",
-    "keywords": "planet, happiness, people",
+    "keywords": "RTOS, FreeRTOS,",
     "repository":
     {
       "type": "git",
-      "url": "https://github.com/username/hello-world.git"
+      "url": "https://github.com/shirokuma89dev/RTOS-Kit.git"
     },
     "authors":
     [
       {
-        "name": "John Smith",
-        "email": "me@john-smith.com",
-        "url": "https://www.john-smith/contact"
-      },
-      {
-        "name": "Andrew Smith",
-        "email": "me@andrew-smith.com",
-        "url": "https://www.andrew-smith/contact",
-        "maintainer": true
+        "name": "shirokuma89dev",
+        "email": "code@shirokuma89.dev",
+        "url": "https://blog.shirokuma89.dev"
       }
     ],
     "license": "MIT",
-    "homepage": "https://www.helloworld.org/",
-    "dependencies": {
-      "ownername/print": "~1.3.0"
-    },
-    "frameworks": "*",
-    "platforms": "*"
-  }
+    "frameworks": "Arduino",
+    "platforms": "atmelavr,STM32"
+}
