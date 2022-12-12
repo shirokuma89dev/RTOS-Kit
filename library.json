@@ -13,7 +13,8 @@
       {
         "name": "shirokuma89dev",
         "email": "code@shirokuma89.dev",
-        "url": "https://blog.shirokuma89.dev"
+        "url": "https://blog.shirokuma89.dev",
+        "maintainer": true
       }
     ],
     "license": "MIT",

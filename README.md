@@ -1,2 +1,177 @@
 # RTOS-Kit
-誰でも簡単にFreeRTOSで並列処理
+
+![](logo.png)
+
+誰でも簡単にFreeRTOSで並列処理ができます！！！
+
+## 概念
+
+![アートボード 1](https://user-images.githubusercontent.com/47915291/206947016-9dfed748-1db9-4174-8a67-9c1f480fcbd1.png)
+
+普通だったらある処理が終わってから次の処理へ進むので、仮にTaskAの中に`delay()`などの時間待ち処理があると後のTaskBに影響を受ける。
+
+RTOSを使うと並列に処理を行うことができるので**TaskAにどんだけ時間がかかってもTaskBは影響を受けない。** 上の例だと優先度という概念があり、TaskAとTaskBが優先され、その後優先度の低いTaskCが実行されている。（もちろん、TaskCの優先度をTaskA,Bと同じに設定すればTaskA,B,Cが同時に並行して実行されることになる。）
+
+イメージとしてはパソコンで同時に複数のアプリを起動する感じです。以降、それぞれの一連の流れを集めたタスクのことをAppと呼ぶことにします。
+
+## 使用の流れ
+
+### 1.RTOS-Kitを#includeする
+
+プログラムの先頭らへんに
+```cpp
+#include <FreeRTOS.h>
+#include <RTOS-Kit.h>
+```
+と記述してください。STM32勢の方は一行目は`#include <STM32FreeRTOS.h>`でお願いします。
+
+### 2.インスタンス作成
+
+```cpp
+RTOS_Kit app;
+```
+
+でappインスタンスを作成できます。void setup()の前らへん。これに関しては意味とか気にせずに脳死でやってください。
+
+### 3.Appを定義する。
+
+Appを定義します。といっても関数を作るだけです。例えばブザーをピコピコ鳴らすプログラムはこんな感じ。
+
+```cpp
+void buzzerApp(App) {
+    // ここはApp起動時に一回だけ実行される
+    while (1) {
+        // ここは無限ループ
+        speaker.setFrequncy(440);
+        app.delay(100);
+        speaker.mute();
+        app.delay(100);
+    }
+}
+```
+
+- void functionName(App)で定義する。Appは忘れがちなので注意
+- 中にはwhile(1)を記述して無限ループになるようにする。
+- delayは全てapp.delay()にする
+
+### 4.Appを登録する
+
+残念ながらいきなりアプリとして起動することができないので、
+
+```cpp
+app.create(functionName);
+```
+
+としてRTOS側に`void buzzerApp(App)`がただの関数ではなくAppであるということを登録してください。
+
+> **オプション:**<br>
+> ```cpp
+> app.create(functionName, 優先度);
+> ```
+> で優先度を指定できます。優先度は`firstPriority`,`secondPriority`,`defaultPriority`,`lowPriority`から選んでください。何も指定しない場合は基本的にデフォルト。
+
+### 5.初期状態で起動するAppを指定する
+
+初期状態ではAppは起動していないので初期状態で起動するAppを一つ以上必ず指定してください。
+
+```cpp
+app.start(funcitonName);
+```
+
+### 6.RTOS起動
+
+```cpp
+app.startRTOS();
+```
+
+でRTOSを起動します。`app.startRTOS();`以降の行に書いたプログラムは**全て無視される**ことに注意してください。つまり**void loop()内に何かを記述しても何も実行されません。**
+
+### 7.適宜アプリを起動、一時停止
+
+Appの起動（再開）と一時停止は
+
+```cpp
+app.start(functionName);
+app.stop(functionName);
+```
+
+でできます。あくまで再開と一時停止です。初回の再開=起動という扱いです。再起動とか終了とかはないです。（要望あったら作ります。）
+
+## サンプル
+
+```cpp
+#include <Arduino.h>
+#include <FreeRTOS.h>
+#include <RTOS-Kit.h>
+
+RTOS_Kit app;
+
+void blinkApp1(App) {
+    pinMode(12, OUTPUT);
+    while (1) {
+        digitalWrite(12, HIGH);
+        app.delay(150);
+        digitalWrite(12, LOW);
+        app.delay(150);
+    }
+}
+
+void blinkApp2(App) {
+    pinMode(13, OUTPUT);
+    while (1) {
+        digitalWrite(13, HIGH);
+        app.delay(100);
+        digitalWrite(13, LOW);
+        app.delay(100);
+    }
+}
+
+void mainApp(App) {
+    // blinkApp1
+    app.start(blinkApp1);
+    app.delay(3000);
+
+    // blinkApp2
+    app.stop(blinkApp1);
+    app.start(blinkApp2);
+    app.delay(3000);
+
+    // Appを全て停止
+    app.stop(blinkApp2);
+    app.delay(3000);
+
+    //全て再開
+    app.start(blinkApp1);
+    app.start(blinkApp2);
+
+    while (1) {
+    }
+}
+
+void setup() {
+    app.create(mainApp, firstPriority);
+    app.create(blinkApp1);
+    app.create(blinkApp2);
+
+    app.start(mainApp);  //メインアプリを初回起動に設定
+    app.startRTOS();
+}
+
+void loop() {
+    // Nothing to do.
+}
+```
+
+## ありそうなQ&A
+
+### delay()を使うとどうなりますか？
+
+lowPriorityに指定したAppの動作がその間は実行されません。app.delay()だとその間にlowPriority()に指定したAppが実行されます。
+
+### セマフォとかキューとか色々ないじゃないか！！！
+
+これはお手軽RTOSライブラリです。詳しくて強い人は普通にRTOS使ってね。
+
+### もっと機能増やして
+
+ごめんて
