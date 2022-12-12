@@ -8,6 +8,15 @@ STM32用です。ちょっと変えるだけでAVR系もいけるかも。
 
 v1.0.1
 
+## インストール
+
+2種類のインストール方法があります。
+
+- PlatformIOのLibrariesで「RTOS-Kit」と検索してインストール
+- このプロジェクトをダウンロードしてsrcフォルダ内をご自身のプロジェクトフォルダにコピペ
+
+<img width="1147" alt="スクリーンショット 2022-12-12 22 13 04" src="https://user-images.githubusercontent.com/47915291/207054198-f301bd11-28ef-47cc-b8e3-5acc55852cf8.png">
+
 ## 概念
 
 ![アートボード 1](https://user-images.githubusercontent.com/47915291/206947016-9dfed748-1db9-4174-8a67-9c1f480fcbd1.png)
@@ -174,4 +183,8 @@ lowPriorityに指定したAppの動作がその間は実行されません。app
 
 ### もっと機能増やして
 
-ごめんて
+Issue立てたら対応するかも
+
+### 需要どこにあんの？
+
+それな
