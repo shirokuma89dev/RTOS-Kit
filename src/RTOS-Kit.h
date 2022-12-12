@@ -1,6 +1,8 @@
 #ifndef _RTOSKIT_H_
 #define _RTOSKIT_H_
 
+#include <STM32FreeRTOS.h>
+
 #define App void *rtosKit
 #define maximumAppCount 10
 

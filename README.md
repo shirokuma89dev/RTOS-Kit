@@ -1,13 +1,12 @@
-# RTOS-Kit
-
 ![](rtos-kit.png)
 
 誰でも簡単にFreeRTOSで並列処理ができます！！！
 
-## 重要 Important
+STM32用です。ちょっと変えるだけでAVR系もいけるかも。
 
-**現在開発中です！あと数日待ってください。
-It's in development now! Please wait a few more days.**
+## 最新バージョン
+
+v1.0.1
 
 ## 概念
 
@@ -25,10 +24,9 @@ RTOSを使うと並列に処理を行うことができるので**TaskAに時間
 
 プログラムの先頭に
 ```cpp
-#include <FreeRTOS.h>
 #include <RTOS-Kit.h>
 ```
-と記述してください。STM32勢の方は一行目は`#include <STM32FreeRTOS.h>`となります。RTOS-Kitのインストールと同時にFreeRTOS.hもインストールしておいてください。コンパイルエラーになります。
+と記述してください。依存関係があるので`STM32duino FreeRTOS`もインストールしておいてください。
 
 ### 2.インスタンス作成
 
@@ -104,7 +102,6 @@ app.stop(functionName);
 
 ```cpp
 #include <Arduino.h>
-#include <FreeRTOS.h>
 #include <RTOS-Kit.h>
 
 RTOS_Kit app;
