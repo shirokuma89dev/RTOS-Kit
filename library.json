@@ -1,0 +1,32 @@
+{
+    "name": "RTOS-Kit",
+    "version": "1.0.0",
+    "description": "FreeRTOSを誰でも簡単に扱えるようにするためのライブラリです。",
+    "keywords": "planet, happiness, people",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/username/hello-world.git"
+    },
+    "authors":
+    [
+      {
+        "name": "John Smith",
+        "email": "me@john-smith.com",
+        "url": "https://www.john-smith/contact"
+      },
+      {
+        "name": "Andrew Smith",
+        "email": "me@andrew-smith.com",
+        "url": "https://www.andrew-smith/contact",
+        "maintainer": true
+      }
+    ],
+    "license": "MIT",
+    "homepage": "https://www.helloworld.org/",
+    "dependencies": {
+      "ownername/print": "~1.3.0"
+    },
+    "frameworks": "*",
+    "platforms": "*"
+  }
