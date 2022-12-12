@@ -1,6 +1,6 @@
 # RTOS-Kit
 
-![](logo.png)
+![](rtos-kit.png)
 
 誰でも簡単にFreeRTOSで並列処理ができます！！！
 
