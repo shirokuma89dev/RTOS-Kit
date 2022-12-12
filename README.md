@@ -13,9 +13,9 @@ It's in development now! Please wait a few more days.**
 
 ![アートボード 1](https://user-images.githubusercontent.com/47915291/206947016-9dfed748-1db9-4174-8a67-9c1f480fcbd1.png)
 
-普通だったらある処理が終わってから次の処理へ進むので、仮にTaskAの中に`delay()`などの時間待ち処理があると後のTaskBに影響を受ける。
+普通だったらある処理が終わってから次の処理へ進むので、仮にTaskAの中に`delay()`などの時間待ち処理があると後のTaskBに影響を受けてしまいます。
 
-RTOSを使うと並列に処理を行うことができるので**TaskAにどんだけ時間がかかってもTaskBは影響を受けない。** 上の例だと優先度という概念があり、TaskAとTaskBが優先され、その後優先度の低いTaskCが実行されている。（もちろん、TaskCの優先度をTaskA,Bと同じに設定すればTaskA,B,Cが同時に並行して実行されることになる。）
+RTOSを使うと並列に処理を行うことができるので**TaskAに時間がかかってもTaskBは影響を受けません。** 上の例だと優先度という概念があり、TaskAとTaskBが優先され、その後優先度の低いTaskCが実行されています。（例えば、TaskCの優先度をTaskA,Bと同じに設定すればTaskA,B,Cが同時に並行して実行されることになる。）
 
 イメージとしてはパソコンで同時に複数のアプリを起動する感じです。以降、それぞれの一連の流れを集めたタスクのことをAppと呼ぶことにします。
 
@@ -23,12 +23,12 @@ RTOSを使うと並列に処理を行うことができるので**TaskAにどん
 
 ### 1.RTOS-Kitを#includeする
 
-プログラムの先頭らへんに
+プログラムの先頭に
 ```cpp
 #include <FreeRTOS.h>
 #include <RTOS-Kit.h>
 ```
-と記述してください。STM32勢の方は一行目は`#include <STM32FreeRTOS.h>`でお願いします。
+と記述してください。STM32勢の方は一行目は`#include <STM32FreeRTOS.h>`となります。RTOS-Kitのインストールと同時にFreeRTOS.hもインストールしておいてください。コンパイルエラーになります。
 
 ### 2.インスタンス作成
 
@@ -36,20 +36,19 @@ RTOSを使うと並列に処理を行うことができるので**TaskAにどん
 RTOS_Kit app;
 ```
 
-でappインスタンスを作成できます。void setup()の前らへん。これに関しては意味とか気にせずに脳死でやってください。
+でインスタンスを作成できます。好みの名前がある方はここで指定して下さい。以降の説明はappでインスタンスを作成したものとして進めます。
 
 ### 3.Appを定義する。
 
-Appを定義します。といっても関数を作るだけです。例えばブザーをピコピコ鳴らすプログラムはこんな感じ。
+Appとなる関数を定義します。お馴染みのLチカだとこのようになります。（Arduino仕様です。）
 
 ```cpp
-void buzzerApp(App) {
-    // ここはApp起動時に一回だけ実行される
+void blinkApp(App) {
+    pinMode(13, OUTPUT);
     while (1) {
-        // ここは無限ループ
-        speaker.setFrequncy(440);
+        digitalWrite(13, HIGH);
         app.delay(100);
-        speaker.mute();
+        digitalWrite(13, LOW);
         app.delay(100);
     }
 }
@@ -61,23 +60,22 @@ void buzzerApp(App) {
 
 ### 4.Appを登録する
 
-残念ながらいきなりアプリとして起動することができないので、
 
 ```cpp
 app.create(functionName);
 ```
 
-としてRTOS側に`void buzzerApp(App)`がただの関数ではなくAppであるということを登録してください。
+としてRTOS側に`void buzzerApp(App)`がただの関数ではなくAppであるということを登録してください。Appは10個まで登録できます。
 
 > **オプション:**<br>
 > ```cpp
 > app.create(functionName, 優先度);
 > ```
-> で優先度を指定できます。優先度は`firstPriority`,`secondPriority`,`defaultPriority`,`lowPriority`から選んでください。何も指定しない場合は基本的にデフォルト。
+> で優先度を指定できます。優先度は`firstPriority`,`secondPriority`,`defaultPriority`,`lowPriority`から選んでください。何も指定しなかった場合、自動的にdefaultPriorityが割り当てられます。
 
 ### 5.初期状態で起動するAppを指定する
 
-初期状態ではAppは起動していないので初期状態で起動するAppを一つ以上必ず指定してください。
+このままRTOSをスタートすると何もAppが起動しない状態となってしまうので、初期状態で起動するAppを一つ以上必ず指定してください。
 
 ```cpp
 app.start(funcitonName);
@@ -89,7 +87,7 @@ app.start(funcitonName);
 app.startRTOS();
 ```
 
-でRTOSを起動します。`app.startRTOS();`以降の行に書いたプログラムは**全て無視される**ことに注意してください。つまり**void loop()内に何かを記述しても何も実行されません。**
+でRTOSを起動します。`app.startRTOS();`以降の行に書いたプログラムは**全て無視される**ことに注意してください。**
 
 ### 7.適宜アプリを起動、一時停止
 
@@ -100,7 +98,7 @@ app.start(functionName);
 app.stop(functionName);
 ```
 
-でできます。あくまで再開と一時停止です。初回の再開=起動という扱いです。再起動とか終了とかはないです。（要望あったら作ります。）
+でできます。あくまで再開と一時停止です。初回の再開=起動という扱いです。再起動とか終了とかはないです。（要望あれば作ります。）
 
 ## サンプル
 
@@ -173,7 +171,7 @@ void loop() {
 
 lowPriorityに指定したAppの動作がその間は実行されません。app.delay()だとその間にlowPriority()に指定したAppが実行されます。
 
-### セマフォとかキューとか色々ないじゃないか！！！
+### セマフォとかキューとかメモリ管理とか色々ないじゃないか！！！
 
 これはお手軽RTOSライブラリです。詳しくて強い人は普通にRTOS使ってね。
 
