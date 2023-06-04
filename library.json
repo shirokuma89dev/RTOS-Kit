@@ -1,6 +1,6 @@
 {
     "name": "RTOS-Kit",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "FreeRTOSを誰でも簡単に扱えるようにするためのライブラリです。STM32用です。",
     "keywords": "RTOS, FreeRTOS",
     "repository":
